@@ -1,0 +1,18 @@
+{
+  "name": "qr_food_order_backend",
+  "version": "1.0.0",
+  "description": "Backend for QR Food Order system",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "escpos": "^3.0.0-alpha.6",
+    "express": "^4.19.2"
+  }
+}

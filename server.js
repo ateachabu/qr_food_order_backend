@@ -3,7 +3,13 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const axios = require('axios'); // เพิ่มบรรทัดนี้
 const menuCategories = require('./menuData');
+const printProxyUrl = 'http://YOUR_LOCAL_IP_ADDRESS_OF_COMPUTER:4000/print'; 
+// **สำคัญ:** YOUR_LOCAL_IP_ADDRESS_OF_COMPUTER คือ IP Address ของคอมพิวเตอร์ที่รัน Print Proxy
+// คุณต้องไปดู IP ของคอมพิวเตอร์ที่รัน Print Proxy ก่อน โดยเปิด Command Prompt แล้วพิมพ์ `ipconfig`
+// ตัวอย่าง: ถ้า IP ของคอมพิวเตอร์คุณคือ 192.168.1.52
+// ให้เป็น: const printProxyUrl = 'http://192.168.1.52:4000/print';
 
 const app = express();
 // Port นี้จะถูกกำหนดโดย Cloud Platform (เช่น Render, Heroku)
@@ -27,6 +33,28 @@ app.get('/menu', (req, res) => {
 app.post('/order', (req, res) => {
     const orderData = req.body;
     console.log('Received order:', orderData);
+    app.post('/order', (req, res) => {
+    const orderData = req.body;
+    console.log('Received order:', orderData); // บรรทัดนี้มีอยู่แล้ว
+
+    if (orderData.items.length === 0) {
+        return res.status(400).json({ message: 'Order data is empty or invalid.' });
+    }
+
+    // *** เพิ่มโค้ดส่วนนี้เพื่อส่งข้อมูลไปที่ Print Proxy ***
+    axios.post(printProxyUrl, orderData)
+        .then(response => {
+            console.log('Print proxy response:', response.data);
+            // ถ้าต้องการแสดงข้อความจาก printer proxy ใน Frontend สามารถทำได้ตรงนี้
+        })
+        .catch(error => {
+            console.error('Error sending data to print proxy:', error.message);
+            // คุณอาจจะเพิ่มการแจ้งเตือนในกรณีที่พิมพ์ไม่ได้
+        });
+    // ******************************************************
+
+    res.status(200).json({ message: 'ออเดอร์ได้รับแล้ว จะพิมพ์ใบเสร็จให้คุณค่ะ' }); // บรรทัดนี้มีอยู่แล้ว
+});
 
     if (!orderData || !orderData.items || orderData.items.length === 0) {
         return res.status(400).json({ message: 'Order data is empty or invalid.' });

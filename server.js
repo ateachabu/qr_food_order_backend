@@ -33,6 +33,48 @@ app.get('/menu', (req, res) => {
 app.post('/order', (req, res) => {
     const orderData = req.body;
     console.log('Received order:', orderData);
+    app.post('/order', async (req, res) => {
+    const orderData = req.body; // รับข้อมูลสั่งซื้อจาก Backend
+
+    console.log('Received order:', orderData); // บรรทัดนี้มีอยู่แล้ว
+
+    // **เพิ่มบรรทัดนี้**
+    console.log('Attempting to send order to print proxy...');
+
+    if (!orderData || orderData.items.length === 0) {
+        return res.status(400).json({ Message: 'Order data is empty or invalid.' });
+    }
+
+    try {
+        // **เพิ่มบรรทัดนี้**
+        console.log('Inside try block, sending to:', PRINT_PROXY_URL);
+
+        const response = await axios.post(PRINT_PROXY_URL, orderData);
+
+        // **เพิ่มบรรทัดนี้**
+        console.log('Successfully sent to print proxy. Response status:', response.status);
+        console.log('Print Proxy response data:', response.data);
+
+        // Assuming the proxy returns some confirmation for success.
+        // You might want to adjust this based on your actual proxy response structure.
+        res.status(200).json({ message: 'Order received and sent to print proxy successfully.' });
+
+    } catch (error) {
+        // **เพิ่มบรรทัดนี้**
+        console.error('Error in print proxy communication:', error.message);
+        // **เพิ่มบรรทัดนี้ถ้าต้องการเห็น Stack Trace ของ Error**
+        if (error.response) {
+            console.error('Print Proxy Error Status:', error.response.status);
+            console.error('Print Proxy Error Data:', error.response.data);
+        } else if (error.request) {
+            console.error('No response received from Print Proxy. Request:', error.request);
+        } else {
+            console.error('Error setting up request to Print Proxy:', error.message);
+        }
+
+        res.status(500).json({ message: 'Failed to send order to print proxy.', error: error.message });
+    }
+});
     app.post('/order', (req, res) => {
     const orderData = req.body;
     console.log('Received order:', orderData); // บรรทัดนี้มีอยู่แล้ว

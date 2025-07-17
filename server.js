@@ -5,7 +5,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const axios = require('axios'); // เพิ่มบรรทัดนี้
 const menuCategories = require('./menuData');
-const printProxyUrl = '  https://5a19fb53dcc2.ngrok-free.app -> http://localhost:4000'; 
+const printProxyUrl = 'https://46e182f6be36.ngrok-free.app -> http://localhost:4000'; 
 // **สำคัญ:** YOUR_LOCAL_IP_ADDRESS_OF_COMPUTER คือ IP Address ของคอมพิวเตอร์ที่รัน Print Proxy
 // คุณต้องไปดู IP ของคอมพิวเตอร์ที่รัน Print Proxy ก่อน โดยเปิด Command Prompt แล้วพิมพ์ `ipconfig`
 // ตัวอย่าง: ถ้า IP ของคอมพิวเตอร์คุณคือ 192.168.1.52
